@@ -1,0 +1,66 @@
+﻿
+@using MvcBlog.Classes
+@using MvcBlog.Models
+@model IEnumerable<Post>
+
+@{
+    ViewBag.Title = "Listed";
+}
+
+
+<h2>Posts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create","Posts"))
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Заглавие
+        </th>
+        <th>
+            Съдържание
+        </th>
+        <th>
+            Дата
+        </th>
+        <th>
+            Действия
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Utils.CutText(item.Body);
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @if (item.Author != null)
+                {
+                    @item.Author.UserName
+                }
+                else
+                {
+                    @:<i>(Няма автор)</i>
+            }
+            </td>
+            <td>
+                @if (User.IsInRole("Administrators") || User.Identity.Name == item.Author.UserName)
+                {
+                    @Html.ActionLink("Edit", "Edit", "Posts", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+
+                    @Html.ActionLink("Delete", "Delete", "Posts", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                }
+                @Html.ActionLink("Details", "Details", "Posts", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })|
+            </td>
+        </tr>
+    }
+
+</table>

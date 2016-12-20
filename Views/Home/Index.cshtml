@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using Antlr.Runtime.Tree
+@model List<MvcBlog.Models.Post>
+    
+<style type="text/css">
+    #tui {
+        background-image: url('../../Content/images/37308726-dark-blue-wallpaper.jpg');
+        color: #fffff0;
+    }
+</style>
+
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img src="~/Content/images/lol_2_category-1170x300.jpg" alt="ASP.NET" class="img-responsive" />
+            <div class="carousel-caption" role="option">
+                <h2>@Model[0].Title</h2>
+                @*@Html.ActionLink("Details", "Details", "Posts", new { id = Model[0].ID }, new { @class = "btn btn-default" })*@
+                <button class="btn btn-default" id="@Model[0].ID">Details</button>
+                
+               
+            </div>
+        </div>
+        @for (int i = 1; i < 3; i++)
+        {
+            <div class="item">
+                <img src="~/Content/images/lol_2_category-1170x300.jpg" alt="ASP.NET" class="img-responsive" />
+                <div class="carousel-caption" role="option">
+                    <h2>@Model[i].Title</h2>
+                    @*@Html.ActionLink("Details", "Details", "Posts", new { id = Model[i].ID }, new { @class = "btn btn-default" })*@
+                    <button class="btn btn-default" id="@Model[i].ID">Details</button>
+                    
+                </div>
+            </div>
+        }
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="container" margin-top="50px">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="tui" margin="15px">
+
+            </div>
+        </div>
+     </div>
+</div>
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".btn").on("click", function() {
+            var val = $(this).attr('id');
+            $.ajax({
+                url: "/Home/_Post",
+                type: "GET",
+                data: { id:val}
+            })
+            .done(function(partialViewResult) {
+                $("#tui").html(partialViewResult);
+            });
+        });
+    });
+</script>
