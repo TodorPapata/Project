@@ -20,6 +20,7 @@ namespace MvcBlog.Controllers
 
         public ActionResult _Post(int id)
         {
+            
             Post post = db.Posts.Find(id);
             return PartialView(post);
         }

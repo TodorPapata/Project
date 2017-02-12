@@ -106,7 +106,7 @@ namespace MvcBlog.Controllers
                 return HttpNotFound();
             }
             
-            if (!User.IsInRole("Administrators")&& User.Identity.Equals(post.Author))
+            if (!(User.IsInRole("Administrators"))&& !(User.Identity.Equals(post.Author)))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
@@ -133,7 +133,7 @@ namespace MvcBlog.Controllers
         }
 
         // GET: Posts/Delete/5
-        [Authorize(Roles = "Administrators")]
+        
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -145,20 +145,32 @@ namespace MvcBlog.Controllers
             {
                 return HttpNotFound();
             }
+            if (!User.IsInRole("Administrators") && !User.Identity.Equals(post.Author))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             return View(post);
+            
         }
 
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrators")]
+        
         public ActionResult DeleteConfirmed(int id)
         {
             Post post = db.Posts.Find(id);
+            if (!User.IsInRole("Administrators") && User.Identity.Equals(post.Author))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            
+            
             db.Posts.Remove(post);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {

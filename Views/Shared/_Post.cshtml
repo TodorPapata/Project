@@ -1,4 +1,12 @@
 ﻿@model MvcBlog.Models.Post
 <h2>@Model.Title</h2>
 <p>@Model.Body</p>
-<p><small>@Model.Author</small></p>
+<p><small>@Model.Date</small></p>
+@foreach (var tag in Model.Tags)
+{
+
+    @Html.ActionLink(tag.Name, "ListPostsByTag", "Tag", new { @id = tag.ID }, null);
+
+
+
+}
